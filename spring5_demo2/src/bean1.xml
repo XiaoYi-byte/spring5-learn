@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="com.spring5"></context:component-scan>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/user_db"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+<!--        JdbcTemplate源码有有参构造器，但实质上是用set方法实现，故这里用property-->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+<!--   1 创建事务管理器,接口为PlatFormTransactionManager,针对不同的框架有不同的实现类，jdbcTemplate为DataSourceTransactionManager-->
+    <bean id= "transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+<!--    开启事务-->
+<!--    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>-->
+
+<!--    到对应类或方法上添加@Transactional-->
+<!--    2 配置通知-->
+    <tx:advice id="interceptor">
+        <tx:attributes>
+<!--            指定在哪种方法上添加事务-->
+            <tx:method name="add" propagation="REQUIRED"/>
+<!--            以a开头的方法-->
+<!--            <tx:method name="a*"/>-->
+
+        </tx:attributes>
+    </tx:advice>
+<!--    3 配置切入点和切面-->
+    <aop:config>
+        <aop:pointcut id="pc" expression="execution(* com.spring5.service.BookService.add(..))"/>
+        <aop:advisor advice-ref="interceptor" pointcut-ref="pc"/>
+    </aop:config>
+</beans>
