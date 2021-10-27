@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--配置User对象创建-->
+
+    <!--set方式注入属性-->
+        <bean id="user" class="com.spring5.User">
+            <property name="id" value="1"></property>
+            <property name="name" value="Amy"></property>
+            <!--设置null值-->
+<!--            <property name="address">-->
+<!--                <null/>-->
+<!--            </property>-->
+            <!--使用<>：
+                1.转义，&lt; &gt;
+                2.如下
+            -->
+            <property name="address">
+                <value><![CDATA[<<南京>>]]></value>
+            </property>
+        </bean>
+
+    <!--有参构造器注入-->
+<!--    <bean id="user" class="com.spring5.User">-->
+<!--        <constructor-arg name="id" value="1"></constructor-arg>-->
+<!--        <constructor-arg name="name" value="Amy"></constructor-arg>-->
+<!--        &lt;!&ndash;用index可以代替name，索引从0开始&ndash;&gt;-->
+<!--    </bean>-->
+
+    <!--基于p名称空间注入，注意beans标签中要加入xmlns:p，实际上底层仍然是基于set方式实现-->
+<!--    <bean id="user" class="com.spring5.User" p:id="1" p:name="Amy"></bean>-->
+</beans>

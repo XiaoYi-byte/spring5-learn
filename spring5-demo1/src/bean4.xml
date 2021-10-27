@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+<!--    把集合注入部分提取出来-->
+    <util:list id="courseList">
+        <ref bean="course1"></ref>
+        <ref bean="course2"></ref>
+    </util:list>
+
+<!--    scope属性singleton（单实例）和prototype（多实例）区别：-->
+<!--    设置scope值为singleton时，加载spring配置的时候就会创建单实例对象-->
+<!--    设置scope值为prototype时，加载spring配置的时候不创建单实例对象，getBean时创建多实例对象-->
+<!--    -->
+<!--    其他属性值：request、session-->
+    <bean id="stu" class="com.spring5.collectionType.Student" scope="singleton">
+        <property name="courses" ref="courseList"></property>
+    </bean>
+
+    <bean id="course1" class="com.spring5.collectionType.Course">
+        <property name="CName" value="java编程"></property>
+    </bean>
+    <bean id="course2" class="com.spring5.collectionType.Course">
+        <property name="CName" value="java编程1"></property>
+    </bean>
+
+<!--    工厂bean-->
+    <bean id="myBean" class="com.spring5.factoryBean.MyBean"></bean>
+
+
+
+<!--    bean生命周期：-->
+<!--    1.通过构造器创建bean实例（无参数构造）-->
+<!--    2.为bean的属性设置值和对其他bean引用（调用set方法)-->
+<!--    3.调用bean的初始化的方法（需要进行配置初始化的方法）-->
+<!--        <bean init-method=""></bean>-->
+<!--    4.获取bean-->
+<!--    5.手动销毁bean-->
+<!--        <bean destroy-method=""></bean>-->
+<!--        context.close();-->
+
+<!--    在第三步前后进行将bean传给后置处理器（postprocessor）-->
+<!--        实现一个类实现BeanPostProcessor接口，实现两个方法postProcessorBeforeInitialization、postProcessorAfterInitialization
+        共有七步
+
+        自动装配：autowire属性（常用byName和byType）
+        可省去property中的ref  <property name="courses" ref="courseList"></property>
+        -->
+
+</beans>

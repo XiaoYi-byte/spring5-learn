@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="userService" class="com.spring5.service.UserService">
+        <!--注入外部bean-->
+        <!-- name : 类中属性名称
+             ref : bean标签中的id
+             当ref中的bean内部有property时也会进行注入到userDao，即级联赋值的第一种方法-->
+
+<!--        <property name="userDao" ref="userDaoImpl"></property>-->
+
+<!--        注入内部bean-->
+        <property name="userDao">
+            <bean id="userDaoImpl" class="com.spring5.dao.UserDaoImpl"></bean>
+        </property>
+
+<!--        级联赋值的第二种方式，需要创建userDaoImpl的get方法-->
+        <property name="userDaoImpl.uName" value="123"></property>
+    </bean>
+</beans>
